@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"net/http"
 
+	_ "github.com/tas1999/TestProject/docs"
+
 	"github.com/go-chi/chi"
 	"github.com/swaggo/http-swagger"
-
-	_ "./docs"
 	_ "github.com/lib/pq"
 	_ "github.com/swaggo/swag/example/celler/httputil"
 	_ "github.com/swaggo/swag/example/celler/model"
