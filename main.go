@@ -6,13 +6,11 @@ import (
 	"fmt"
 	"net/http"
 
-	_ "github.com/tas1999/TestProject/docs"
-
+	_ "./docs"
 	"github.com/go-chi/chi"
-	"github.com/swaggo/http-swagger"
 	_ "github.com/lib/pq"
-	_ "github.com/swaggo/swag/example/celler/httputil"
-	_ "github.com/swaggo/swag/example/celler/model"
+	"github.com/swaggo/http-swagger"
+
 )
 
 var (
@@ -97,7 +95,7 @@ func Swagger() {
 	r := chi.NewRouter()
 
 	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:1323/swagger/doc.json"), //The url pointing to API definition
+		httpSwagger.URL("http://localhost:1323/swagger/doc.json")
 	))
 
 	http.ListenAndServe(":1323", r)
