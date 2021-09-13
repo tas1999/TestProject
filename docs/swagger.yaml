@@ -25,7 +25,28 @@ info:
   title: Swagger TestProject API
   version: "1.0"
 paths:
-  /:
+  /player:
+    post:
+      consumes:
+      - application/json
+      description: add player
+      operationId: add-player
+      parameters:
+      - description: Add player
+        in: body
+        name: player
+        required: true
+        schema:
+          $ref: '#/definitions/main.Player'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+      summary: Add player
+  /players:
     get:
       consumes:
       - application/json

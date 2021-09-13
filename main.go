@@ -84,26 +84,26 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	serveMux := http.NewServeMux()
+	serveMux.Handle("/", handler)
+	serveMux.Handle("/swagger/", Swagger())
 	fmt.Println("starting server at :8082")
-	handler = panicMiddleware(handler)
-	go Swagger()
+	handler = panicMiddleware(serveMux)
+
 	http.ListenAndServe(":8082", handler)
 }
 
-func Swagger() {
+func Swagger() http.Handler {
 	r := chi.NewRouter()
-
 	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:1323/swagger/doc.json"),
+		httpSwagger.URL("http://localhost:8082/swagger/doc.json"),
 	))
-
-	http.ListenAndServe(":1323", r)
+	return r
 }
 func NewDbExplorer(db *sql.DB) (http.Handler, error) {
 	dbEx := DbExplorer{Db: db}
 	serveMux := http.NewServeMux()
-	serveMux.HandleFunc("/", dbEx.List)
-
+	serveMux.HandleFunc("/players", dbEx.List)
 	return serveMux, nil
 }
 func panicMiddleware(next http.Handler) http.Handler {
@@ -130,7 +130,7 @@ type DbExplorer struct {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} []Player
-// @Router / [get]
+// @Router /players [get]
 func (ex *DbExplorer) List(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	rows, err := ex.Db.Query("Select * from players")
@@ -144,6 +144,30 @@ func (ex *DbExplorer) List(w http.ResponseWriter, r *http.Request) {
 
 	__err_panic(err)
 	err = json.NewEncoder(w).Encode(players)
+	__err_panic(err)
+}
+
+// Add player
+// @Summary Add player
+// @Description add player
+// @ID add-player
+// @Accept json
+// @Produce json
+// @Param player body Player true "Add player"
+// @Success 200 {object} int
+// @Router /player [post]
+func (ex *DbExplorer) Add(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var player Player
+	err := json.NewDecoder(r.Body).Decode(&player)
+	__err_panic(err)
+	ret := ex.Db.QueryRow("INSERT INTO Players (name,email,age) VALUES ('?', '?', ?) return id", player.Name, player.Email, player.Age)
+	__err_panic(err)
+	var id int64
+	ret.Scan(&id)
+
+	__err_panic(err)
+	err = json.NewEncoder(w).Encode(id)
 	__err_panic(err)
 }
 func __err_panic(err error) {
