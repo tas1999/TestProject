@@ -104,6 +104,8 @@ func NewDbExplorer(db *sql.DB) (http.Handler, error) {
 	dbEx := DbExplorer{Db: db}
 	serveMux := http.NewServeMux()
 	serveMux.HandleFunc("/players", dbEx.List)
+	serveMux.HandleFunc("/players/add", dbEx.Add)
+
 	return serveMux, nil
 }
 func panicMiddleware(next http.Handler) http.Handler {
@@ -155,7 +157,7 @@ func (ex *DbExplorer) List(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param player body Player true "Add player"
 // @Success 200 {object} int
-// @Router /player [post]
+// @Router /players/add [post]
 func (ex *DbExplorer) Add(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var player Player
