@@ -9,8 +9,7 @@ import (
 	_ "./docs"
 	"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
-	"github.com/swaggo/http-swagger"
-
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 var (
@@ -95,7 +94,7 @@ func Swagger() {
 	r := chi.NewRouter()
 
 	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:1323/swagger/doc.json")
+		httpSwagger.URL("http://localhost:1323/swagger/doc.json"),
 	))
 
 	http.ListenAndServe(":1323", r)
