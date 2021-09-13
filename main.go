@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"net/http"
 
-	_ "./docs"
 	"github.com/go-chi/chi"
 	_ "github.com/lib/pq"
 	httpSwagger "github.com/swaggo/http-swagger"
+	_ "github.com/tas1999/TestProject/docs"
 )
 
 var (
