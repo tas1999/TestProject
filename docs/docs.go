@@ -32,7 +32,31 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/player": {
+        "/players": {
+            "get": {
+                "description": "get list players",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Show a players",
+                "operationId": "get-list-players",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.Player"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/players/add": {
             "post": {
                 "description": "add player",
                 "consumes": [
@@ -59,30 +83,6 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "type": "integer"
-                        }
-                    }
-                }
-            }
-        },
-        "/players": {
-            "get": {
-                "description": "get list players",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Show a players",
-                "operationId": "get-list-players",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/main.Player"
-                            }
                         }
                     }
                 }
